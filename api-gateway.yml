@@ -1,0 +1,59 @@
+# API-GATEWAY.yml  (in GitHub repo)
+# Loaded ONLY by the API-GATEWAY service
+
+server:
+  port: 8989
+
+auth:
+  service:
+    url: lb://AUTH-SERVICE
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          httpclient:
+            connect-timeout: 10000
+            response-timeout: 300000
+
+resilience4j:
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 300s
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 3
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        registerHealthIndicator: true
+    instances:
+      orderCircuitBreaker:
+        baseConfig: default
+      identityCircuitBreaker:
+        baseConfig: default
+      productCircuitBreaker:
+        baseConfig: default
+      inventoryCircuitBreaker:
+        baseConfig: default
+      agentCircuitBreaker:
+        baseConfig: default
+
+logging:
+  level:
+    root: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36}.%M - %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: metrics, health, info, gateway
+  endpoint:
+    gateway:
+      enabled: true
