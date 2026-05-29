@@ -4,7 +4,7 @@ server:
 application:
   services:
     inventory:
-      url: lb://INVENTORY-SERVICE/api/v1/inventories
+      url: lb://API-GATEWAY/api/v1/inventories
 
 spring:
   datasource:
