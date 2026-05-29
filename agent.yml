@@ -1,0 +1,45 @@
+server:
+  port: 9095
+
+spring:
+  ai:
+    ollama:
+      base:
+        url: http://localhost:11434
+        embedding:
+          model: mxbai-embed-large
+        init:
+          pull-model-strategy: when_missing
+          timeout: 5m
+        chat:
+          options:
+            model: mistral
+    vectorstore:
+      pgvector:
+        table-name: vector_store
+        index-type: ivfflat
+        initialize-schema: true
+        dimensions: 1024
+  datasource:
+    url: jdbc:postgresql://localhost:5432/agent
+    username: postgres
+    password: root
+  jpa:
+    show-sql: true
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    listener:
+      ack-mode: manual_immediate
+      group-id: agent-01
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+      properties:
+        max.poll.records: 500
+
+logging:
+  level:
+    root: INFO
+    com.tanveer.agent: DEBUG

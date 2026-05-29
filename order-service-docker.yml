@@ -1,0 +1,51 @@
+server:
+  port: 9094
+
+application:
+  services:
+    inventory:
+      url: lb://INVENTORY-SERVICE/api/v1/inventories
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/order-service
+    username: postgres
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      retries: 2147483647
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
+        compression.type: zstd
+        linger.ms: 50
+        batch.size: 65536
+
+topic:
+  map:
+    PRODUCT_CREATED: product-created
+    PRODUCT_UPDATED: product-updated
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      inventoryService:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+
+logging:
+  level:
+    com.tanveer.order-service: DEBUG

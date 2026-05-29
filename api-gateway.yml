@@ -1,6 +1,3 @@
-# API-GATEWAY.yml  (in GitHub repo)
-# Loaded ONLY by the API-GATEWAY service
-
 server:
   port: 8989
 

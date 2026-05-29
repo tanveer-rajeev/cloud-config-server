@@ -6,13 +6,9 @@ eureka:
       defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
   instance:
     prefer-ip-address: true
-    
-microservice:
-  payment-service:
-    endpoints:
-      endpoint:
-        uri: http://PAYMENT-SERVICE/payment/doPayment
-  identity-service:
-    endpoints:
-      endpoint:
-        uri: http://IDENTITY-SERVICE/auth/getUser/{username}
+
+logging:
+  level:
+    root: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36}.%M - %msg%n"
