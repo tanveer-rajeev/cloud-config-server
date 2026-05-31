@@ -1,11 +1,6 @@
 server:
   port: 9094
 
-application:
-  services:
-    inventory:
-      url: http://localhost:9093/api/v1/inventories
-
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
