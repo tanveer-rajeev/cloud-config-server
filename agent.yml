@@ -4,16 +4,16 @@ server:
 spring:
   ai:
     ollama:
-      base:
-        url: ${OLLAMA_URL:http://localhost:11434}
-        embedding:
+      base-url: ${OLLAMA_URL:http://localhost:11434}
+      embedding:
+        options:
           model: mxbai-embed-large
-        init:
-          pull-model-strategy: when_missing
-          timeout: 5m
-        chat:
-          options:
-            model: mistral
+      chat:
+        options:
+          model: mistral
+      init:
+        pull-model-strategy: when_missing
+        timeout: 5m
     vectorstore:
       pgvector:
         table-name: vector_store
